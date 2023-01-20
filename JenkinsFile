@@ -1,0 +1,37 @@
+pipeline {
+
+    stages {
+        stage('Code Compilation') {
+            steps {
+                echo 'Code Compilation starting'
+                sh 'mvn clean compile'
+				echo 'Code Complilation Completed'
+            }
+        }
+        stage('Code Packaged') {
+            steps {
+                echo 'Code Packaging Starting'
+                sh 'mvn clean package'
+				echo 'Code Package completing'
+            }
+        }
+		stage('Create Docker Image') {
+            steps {
+                echo 'Hello, JDK'
+                sh 'java -version'
+			}
+        }
+        stage('Tag Docker Image') {
+            steps {
+                echo 'Hello, JDK'
+                sh 'java -version'
+			}
+        }
+        stage('Push Docker Image') {
+            steps {
+                echo 'Hello, JDK'
+                sh 'java -version'
+			}
+        }
+	}
+}
