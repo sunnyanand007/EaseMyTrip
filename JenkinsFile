@@ -23,7 +23,7 @@ pipeline {
             steps {
                 echo 'Code Packaging Starting'
                 sh 'mvn clean package'
-				echo 'Code Package completing'
+				echo 'Code Package ending'
             }
         }
         stage('Building Docker Image') {
