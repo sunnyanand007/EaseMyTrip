@@ -4,7 +4,7 @@ pipeline {
               buildDiscarder(logRotator(numToKeepStr: '5', artifactNumToKeepStr: '5'))
      }
 
-     agent { label 'slave_for_project_A' }
+     agent any
 
      tools {
          maven 'maven_3.8'
@@ -24,6 +24,14 @@ pipeline {
                 echo 'Code Packaging Starting'
                 sh 'mvn clean package'
 				echo 'Code Package completing'
+            }
+        }
+        stage('Building Docker Image') {
+            steps {
+                echo 'Starting Building Docker Image'
+                sh 'docker build -t sunnyanand007/easemytrip2023 .'
+                sh 'docker build -t easemytrip2023 .'
+                echo 'Completed  Building Docker Image'
             }
         }
 
