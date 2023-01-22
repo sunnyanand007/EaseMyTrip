@@ -1,29 +1,34 @@
 pipeline {
 
-     options {
-              buildDiscarder(logRotator(numToKeepStr: '5', artifactNumToKeepStr: '5'))
-     }
+    options {
+        buildDiscarder(logRotator(numToKeepStr: '5', artifactNumToKeepStr: '5'))
+    }
 
-     agent any
+    agent any
 
-     tools {
-         maven 'maven_3.8'
-     }
-
-
+    tools {
+        maven 'maven_3.8.6'
+    }
     stages {
         stage('Code Compilation') {
             steps {
-                echo 'Code Compilation starting'
+                echo 'code compilation is starting'
                 sh 'mvn clean compile'
-				echo 'Code Complilation Completed'
+				echo 'code compilation is completed'
             }
         }
-        stage('Code Packaged') {
+        stage('Code Package') {
             steps {
-                echo 'Code Packaging Starting'
+                echo 'code packing is starting'
                 sh 'mvn clean package'
-				echo 'Code Package ending'
+				echo 'code packing is completed'
+            }
+        }
+        stage('Code Quality Check') {
+            steps {
+                echo 'code packing is starting'
+                sh 'java --version'
+				echo 'code packing is completed'
             }
         }
         stage('Building Docker Image') {
@@ -34,14 +39,24 @@ pipeline {
                 echo 'Completed  Building Docker Image'
             }
         }
-        stage(' Docker push to Docker Hub') {
+        stage('Docker Image Scanning') {
             steps {
-                withCredentials([string(credentialsId: 'dockerhubCred', variable: 'dockerhubCred')])
-                sh 'docker login docker.io -u sunnyanand007 -p ${dockerhubCred}'
-                echo "Push Docker Image to DockerHub : In Progress"
-                sh 'docker push sunnyanand007/easemytrip2023:latest'
-                echo "Push Docker Image to DockerHub : In Progress"
-                sh 'whoami'
+                echo 'Docker Image Scanning Started'
+                sh 'java -version'
+                echo 'Docker Image Scanning Started'
+            }
+        }
+        stage(' Docker push to Docker Hub') {
+           steps {
+              script {
+                 withCredentials([string(credentialsId: 'dockerhubCred', variable: 'dockerhubCred')]){
+                 sh 'docker login docker.io -u sunnyanand007 -p ${dockerhubCred}'
+                 echo "Push Docker Image to DockerHub : In Progress"
+                 sh 'docker push sunnyanand007/easemytrip2023:latest'
+                 echo "Push Docker Image to DockerHub : In Progress"
+                 sh 'whoami'
+                 }
+              }
             }
         }
 
