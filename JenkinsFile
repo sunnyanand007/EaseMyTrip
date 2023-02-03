@@ -35,7 +35,6 @@ pipeline {
             steps {
                 echo 'Starting Building Docker Image'
                 sh 'docker build -t sunnyanand007/easemytrip2023 .'
-                sh 'docker build -t easemytrip2023 .'
                 echo 'Completed  Building Docker Image'
             }
         }
@@ -50,7 +49,7 @@ pipeline {
            steps {
               script {
                  withCredentials([string(credentialsId: 'dockerhubCred', variable: 'dockerhubCred')]){
-                 sh 'docker login docker.io -u sunnyanand007 '-p' ${dockerhubCred}'
+                 sh 'docker login docker.io -u sunnyanand007 -p ${dockerhubCred}'
                  echo "Push Docker Image to DockerHub : In Progress"
                  sh 'docker push sunnyanand007/easemytrip2023:latest'
                  echo "Push Docker Image to DockerHub : In Progress"
