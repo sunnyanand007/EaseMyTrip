@@ -45,13 +45,7 @@ pipeline {
                 echo 'Docker Image Scanning Started'
             }
         }
-        stage('Docker tagging') {
-            steps {
-                echo 'Docker Image tagging Started'
-                sh 'docker tag easemytrip:latest 281702978642.dkr.ecr.ap-south-1.amazonaws.com/easemytrip:latest'
-                echo 'Docker tagging completed'
-                    }
-                }
+
 
         stage(' Docker push to Docker Hub') {
            steps {
@@ -59,7 +53,7 @@ pipeline {
                  withCredentials([string(credentialsId: 'dockerhubCred', variable: 'dockerhubCred')]){
                  sh 'docker login -u sunnyanand007 -p ${dockerhubCred}'
                  echo "Push Docker Image to DockerHub : In Progress"
-                 sh 'docker push easemytrip:latest1'
+                 sh 'docker push easemytrip:latest'
                  echo "Push Docker Image to DockerHub : In Progress"
                  sh 'whoami'
                  }
