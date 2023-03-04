@@ -24,13 +24,20 @@ pipeline {
 				echo 'code packing is completed'
             }
         }
-        stage('Code Quality Check') {
-            steps {
-                echo 'code packing is starting'
-                sh 'java --version'
-				echo 'code packing is completed'
+		stage('Sonarqube') {
+           environment {
+               scannerHome = tool 'sonarqube scanner'
+        }
+        steps {
+           withSonarQubeEnv('sonar-server') {
+              sh "${scannerHome}/bin/sonar-scanner"
+              sh 'mvn sonar:sonar'
+            }
+            timeout(time: 10, unit: 'MINUTES') {
+               waitForQualityGate abortPipeline: true
             }
         }
+    }
         stage('Building Docker Image') {
             steps {
                 echo 'Starting Building Docker Image'
